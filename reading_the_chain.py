@@ -15,8 +15,7 @@ def connect_to_eth():
 	w3 = Web3(HTTPProvider(url))
 	assert w3.is_connected(), f"Failed to connect to provider at {url}"
 	return w3
-
-
+	
 def connect_with_middleware(contract_json):
 	with open(contract_json, "r") as f:
 		d = json.load(f)
@@ -27,7 +26,7 @@ def connect_with_middleware(contract_json):
 	w3 = Web3(HTTPProvider(bnb_testnet_url))  
 	w3.middleware_onion.inject(ExtraDataToPOAMiddleware, layer=0)
 	contract = w3.eth.contract(address=address, abi=abi)
-
+	
 	return w3, contract
 
 
@@ -49,19 +48,19 @@ def is_ordered_block(w3, block_num):
 
 	# TODO YOUR CODE HERE
 	block = w3.eth.get_block(block_num, full_transactions=True)
-    transactions = block['transactions']
-    fees = []
-    
-    for txn in transactions:
-        if 'maxPriorityFeePerGas' in txn:
-            fee = min(txn['maxPriorityFeePerGas'] + block['baseFeePerGas'], txn['maxFeePerGas'])
-        else:
-            fee = txn['gasPrice']
-        
-        fees.append(fee)
-    
-    return all(fees[i] >= fees[i + 1] for i in range(len(fees) - 1))
-
+	transactions = block['transactions']
+	fees = []
+	
+	for txn in transactions:
+	if 'maxPriorityFeePerGas' in txn:
+	    fee = min(txn['maxPriorityFeePerGas'] + block['baseFeePerGas'], txn['maxFeePerGas'])
+	else:
+	    fee = txn['gasPrice']
+	
+	fees.append(fee)
+	
+	return all(fees[i] >= fees[i + 1] for i in range(len(fees) - 1))
+	
 	return ordered
 
 
@@ -80,20 +79,20 @@ def get_contract_values(contract, admin_address, owner_address):
 	https://testnet.bscscan.com/address/0xaA7CAaDA823300D18D3c43f65569a47e78220073
 	"""
 	default_admin_role = int.to_bytes(0, 32, byteorder="big")
-
+	
 	# TODO complete the following lines by performing contract calls
 	onchain_root = 0  # Get and return the merkleRoot from the provided contract
 	has_role = 0  # Check the contract to see if the address "admin_address" has the role "default_admin_role"
 	prime = 0  # Call the contract to get the prime owned by "owner_address"
-
+	
 	default_admin_role = contract.functions.DEFAULT_ADMIN_ROLE().call()
-    
-  onchain_root = contract.functions.merkleRoot().call()
-  has_role = contract.functions.hasRole(default_admin_role, admin_address).call()
-  prime = contract.functions.getPrimeByOwner(owner_address).call()
-    
-  return onchain_root, has_role, prime
-
+	
+	onchain_root = contract.functions.merkleRoot().call()
+	has_role = contract.functions.hasRole(default_admin_role, admin_address).call()
+	prime = contract.functions.getPrimeByOwner(owner_address).call()
+	
+	return onchain_root, has_role, prime
+	
 	return onchain_root, has_role, prime
 
 
@@ -108,14 +107,14 @@ if __name__ == "__main__":
 	admin_address = "0xAC55e7d73A792fE1A9e051BDF4A010c33962809A"
 	owner_address = "0x793A37a85964D96ACD6368777c7C7050F05b11dE"
 	contract_file = "contract_info.json"
-
+	
 	eth_w3 = connect_to_eth()
 	cont_w3, contract = connect_with_middleware(contract_file)
-
+	
 	latest_block = eth_w3.eth.get_block_number()
 	london_hard_fork_block_num = 12965000
 	assert latest_block > london_hard_fork_block_num, f"Error: the chain never got past the London Hard Fork"
-
+	
 	n = 5
 	for _ in range(n):
 		block_num = random.randint(1, latest_block)
