@@ -52,14 +52,14 @@ def is_ordered_block(w3, block_num):
 	fees = []
 	
 	for txn in transactions:
-	if 'maxPriorityFeePerGas' in txn:
-	    fee = min(txn['maxPriorityFeePerGas'] + block['baseFeePerGas'], txn['maxFeePerGas'])
-	else:
-	    fee = txn['gasPrice']
-	
-	fees.append(fee)
-	
-	return all(fees[i] >= fees[i + 1] for i in range(len(fees) - 1))
+		if 'maxPriorityFeePerGas' in txn:
+		    fee = min(txn['maxPriorityFeePerGas'] + block['baseFeePerGas'], txn['maxFeePerGas'])
+		else:
+		    fee = txn['gasPrice']
+		
+		fees.append(fee)
+		
+		return all(fees[i] >= fees[i + 1] for i in range(len(fees) - 1))
 	
 	return ordered
 
