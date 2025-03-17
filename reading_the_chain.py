@@ -61,7 +61,7 @@ def is_ordered_block(w3, block_num):
 		
 		return all(fees[i] >= fees[i + 1] for i in range(len(fees) - 1))
 	
-		return ordered
+	return ordered
 
 
 def get_contract_values(contract, admin_address, owner_address):
