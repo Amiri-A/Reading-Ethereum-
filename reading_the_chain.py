@@ -59,7 +59,7 @@ def is_ordered_block(w3, block_num):
 		
 			fees.append(fee)
 		
-		return all(fees[i] >= fees[i + 1] for i in range(len(fees) - 1))
+	ordered = all(fees[i] >= fees[i + 1] for i in range(len(fees) - 1))
 	
 	return ordered
 
